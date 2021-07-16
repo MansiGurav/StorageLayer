@@ -1,0 +1,288 @@
+  
+ db.EMP.find({});
+ 
+-- LIST ALL MANAGER DATA
+db.EMP.find({
+ "JOB" : 'MANAGER'
+});
+
+ 
+
+-- LIST EMP WHO ARE WORKING AS MANAGER OR ANALYST OR CLERK
+db.EMP.find({
+ "JOB": {"$in": ['MANAGER','ANALYST','CLERK'}
+});
+
+ 
+
+-- LIST EMP WHO ARE EARNING SAL BETWEEN 3000 AND 5000 (INCLUSIVE OF LIMIT)
+
+ 
+
+ 
+
+-- LIST EMP WHO ARE WORKING AS MANAGER OR ANALYST OR CLERK AND EARNING SAL BETWEEN 3000 AND 5000
+db.emp.find({
+
+ 
+
+   "$and": [{
+   "job": {"$in": ['MANAGER','ANALYST','CLERK'] }
+ },{
+   "$and": [{
+   
+ },{ 
+   }]
+   }]
+});
+-- LIST ALL EMP WHE ARE EARNING COMM
+db.emp.find({
+ "comm":{ "$gt" : 0 }
+});
+
+ 
+
+-- LIST ALL EMP WHOSE COMM IS NOT NULL
+db.emp.find({
+ "comm ":{ "$gte" :  0 }
+});
+
+ 
+
+-- LIST ALL EMP WHOSE NAME STARTS WITH S
+db.EMP.find({
+ "ename " :  'S%'
+});
+
+ 
+
+-- LIST ALL EMP WHOSE NAME ENDS WITH R
+db.EMP.find({
+ "ename " :  '%R'
+});
+
+ 
+
+-- LIST ALL EMP WHOSE NAME CONTAINS A
+db.EMP.find({
+ "ename " :  '%A%'
+});
+
+ 
+
+-- LIST ALL EMP WHOSE NAME CONTAINS A AS SECOND LETTER
+db.EMP.find({
+ "ename " :  '_A%'
+});
+
+ 
+
+-- LIST ALL EMP WHOSE NAME STARTS WITH EITHER M OR S
+db.EMP.find({
+   "$or": [{
+    "ename " :  'M%%' 
+ },{ "ename " :  'S%'
+   }]
+});
+
+ 
+
+-- LIST ALL EMP WHOSE NAME STARTS BETWEEN A TO M
+
+ 
+
+
+-- LIST ALL EMP WHOSE NAME CONTAINS _
+db.EMP.find({
+ "ename " :  '%\_%' 
+});
+
+ 
+
+-- LIST ALL EMP WHO ARE WORKING AS MANAGER IN EITHER DEPT 10 OR 20 AND ALL CLERK FOR DEPT3 30
+db.emp.find({
+
+ 
+
+   "$or": [{
+    "mgr in (select deptno from emp where deptno" : 10 
+ },{
+   "$or": [{
+    "deptno" : 20) 
+ },{
+   "$and": [{
+   "job" : 'clerk' 
+ },{ " deptno" : 30
+   }]
+   }]
+   }]
+});
+
+ 
+
+ 
+
+db.emp.find({
+
+ 
+
+   "$and": [{
+   "job" : 'manager'  
+    },{
+   "$or": [{
+    "deptno" : 10 
+ },{
+   "$or": [{
+    "deptno" : 20)) 
+ },{
+   "$and": [{
+   "job" : 'clerk' 
+ },{ " deptno" : 30
+   }]
+   }]
+   }]
+   }]
+});
+
+ 
+
+-- LIST ENAME, SAL AND BONUS AS 10% OF SALARY
+db.emp.find({
+ 
+},{
+   "ename": 1,
+   "sal": 1,
+   "0.01*salasBONUS": 1
+}
+);
+
+ 
+
+-- LIST EMP DATA AS PER THE ASCENDING ORDER OF NAME
+db.emporder by ename.find({
+ 
+}).sort({
+ "ename": 1
+});
+
+ 
+
+-- LIST ALL AS PER THEIR SALARY HIGHES TO LOWEST
+db.emporder by sal desc.find({
+ 
+}).sort({
+ "sal": -1
+});
+
+ 
+
+-- LIST EMP AS PER THEIR DEPT, WITH IN DEPT HIGHEST TO LOWESET SAL
+db.emporder by deptno desc.find({
+ 
+}).sort({
+ "deptno": -1
+});
+
+ 
+
+-- list top 3 highest paid emp
+
+ 
+
+
+-- LIST THE DIFFERNT JOB NAME
+
+ 
+
+
+-- LIST TOTAL ORGANIZATION SALARY
+db.emp.find({
+ 
+},{
+   "sum(sal)asTotal_organisation_salary": 1
+}
+);
+
+ 
+
+-- LIST DEPTWISE TOTAL SALARY
+db..group({
+
+ 
+
+   "key":{
+         "deptno": true
+   },
+   "initial": {
+         "sumsalasDepartment_sal ": 0
+   },
+   "reduce": function( obj , prev ){
+         prev.sumsalas Department_sal  = prev.sumsalas Department_sal  + obj.salas Department_sal  - 0;
+
+ 
+
+   },
+   "finalize": function( prev ){
+
+ 
+
+   },
+   "cond": {
+ 
+   }
+
+ 
+
+});
+
+ 
+
+-- LIST JOBWISE EMP COUNT.
+
+ 
+
+-- LIST ALL EMP WHO HAVE JOINED IN MONTH OF FEBdb.emp.find({
+ "month(hiredate)" : '02'
+});
+
+ 
+
+-- LIST EMP COUNT JOINED BETWEEN 1981 AND 1983
+db.emp.find({
+
+ 
+
+   "$and": [{
+   "year(hiredate)":{ "$gt" : '1981'  }
+ },{ " Year(hiredate)":{ "$lt" : '1983' }
+   }]
+},{
+   "count(empno)": 1
+}
+);
+
+ 
+
+-- LIST HOW MANY YEARS OF SERVICE COMPLETED BY EACH EMP ARRANGE BASED ON TENURE HIGHEST TO LOWEST
+
+ 
+
+db.emporder by tenure desc.find({
+ 
+},{
+   "*": 1,
+   "YEAR(CURDATE())-YEAR(hiredate)ASTENURE": 1
+}
+).sort({
+  "tenure": -1
+});
+
+ 
+
+-- RETURN SEQUENTIAL NUMBER RETURN RANK BASED ON SPECIFED CRITERIA IF TWO EMP HAVE
+-- SAME SALARY THEY BOTH GET SAME NUMBER AND NEXT NUMBER WILL BE SKIPPED
+
+ 
+
+
+ 
