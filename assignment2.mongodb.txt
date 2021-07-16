@@ -1,0 +1,336 @@
+- ASSIGNMENT 2
+-- Display all the information of the EMP table?
+db.emp.find({
+ 
+});
+-- Display unique Jobs from EMP table?
+-- List the emps in the asc order of their Salaries?
+db.emporder by sal.find({
+ 
+}).sort({
+ "sal": 1
+});
+
+
+-- List the details of the emps in asc order of the Dptnos and desc of Jobs?
+db.emporder by deptno asc,job desc.find({
+ 
+}).sort({
+ "deptno": -1
+});
+
+-- Display all the unique job groups in the descending order?
+db.emporder by dj desc.find({
+ 
+},{
+   "distinct(job)asdj": 1
+}
+).sort({
+  "dj": -1
+});
+
+ 
+
+-- Display all the details of all ‘Mgrs’
+db.emp.find({
+ "job" : 'manager'
+});
+
+ 
+
+-- List the emps who joined before 1981
+db.emp.find({
+ "year(hiredate)":{ "$lt" : '1981' }
+});
+
+ 
+
+-- List the Empno, Ename, Sal, Daily sal of all emps in the asc order of Annsal
+db.emporder by sal.find({
+ 
+},{
+   "Empno": 1,
+   "Ename": 1,
+   "Sal": 1,
+   "sal/30asDailysal": 1
+}
+).sort({
+  "sal": 1
+});
+
+ 
+
+-- Display the Empno, Ename, job, Hiredate, Exp of all Mgrs
+db.emp.find({
+ "job" : 'manager'
+},{
+   "Empno": 1,
+   "Ename": 1,
+   "job": 1,
+   "Hiredate": 1,
+   "YEAR(CURDATE())-YEAR(hiredate)asExp": 1
+}
+);
+
+ 
+
+-- List the Empno, Ename, Sal, Exp of all emps working for Mgr 7369
+db.emp.find({
+ "mgr" : 7369
+},{
+   "Empno": 1,
+   "Ename": 1,
+   "Sal": 1,
+   "YEAR(CURDATE())-YEAR(hiredate)asExp": 1
+}
+);
+
+ 
+
+-- Display all the details of the emps whose Comm Is more than their Sal
+db.emp.find({
+ "$where": "this.comm > this.sal"
+});
+
+ 
+
+-- List the emps along with their Exp and Daily Sal is more than Rs 100
+db.emp.find({
+ "sal/30":{ "$gt" : 100 }
+},{
+   "*": 1,
+   "YEAR(CURDATE())-YEAR(hiredate)asExp": 1,
+   "sal/30asdailysal": 1
+}
+);
+
+ 
+
+-- List the emps who are either ‘CLERK’ or ‘ANALYST’ in the Desc order
+db.emp.find({
+
+ 
+
+   "$or": [{
+    "job" : 'clerk' 
+ },{ "job" : 'analyst'
+   }]
+}).sort({
+ "job": -1
+});
+
+ 
+
+-- List the emps who joined on 1-MAY-81,3-DEC-81,17-DEC-81,19-JAN-80 in asc order of seniority
+db.emp.find({
+
+ 
+
+   "$and": [{
+   "year(hiredate)" : '1980'  
+    },{
+   "$and": [{
+   "month(hiredate)" : '05'  
+    },{
+   "$or": [{
+    "day(hiredate)" : '1') 
+ },{
+   "$and": [{
+   "year(hiredate)" : '1981'  
+    },{
+   "$and": [{
+   "month(hiredate)" : '12'  
+    },{
+   "$or": [{
+    "day(hiredate)" : '17') 
+ },{
+   "$and": [{
+   "year(hiredate)" : '1981'  
+    },{
+   "$and": [{
+   "month(hiredate)" : '12'  
+    },{
+   "$or": [{
+    "day(hiredate)" : '3' ) 
+ },{
+   "$and": [{
+   "year(hiredate)" : '1980' 
+ },{
+   "$and": [{
+   " month(hiredate)" : '01' 
+ },{ " day(hiredate)" : '19') 
+   }]
+   }]
+   }]
+   }]
+   }]
+   }]
+   }]
+   }]
+   }]
+   }]
+   }]
+}).sort({
+ "exp": 1
+});
+
+ 
+
+
+-- List the emp who are working for the Deptno 10 or20
+db.emp.find({
+
+ 
+
+   "$or": [{
+    "deptno" : 10 
+ },{ "deptno" : 20 
+   }]
+});
+
+ 
+
+-- List the emps who are joined in the year 81
+db.emp.find({
+ "year(hiredate)" : '1981'
+});
+
+ 
+
+-- List the emps Who Annual sal ranging from 22000 and 45000
+db.emp.find({
+
+ 
+
+   "$and": [{
+   
+ },{ 
+   }]
+},{
+   "*": 1,
+   "sal*12asAnnualsalary": 1
+}
+);
+
+ 
+
+-- List the Enames those are having five characters in their Names
+db.emp.find({
+ "ename " : '_____'
+});
+
+ 
+
+-- List the Enames those are starting with ‘S’ and with five characters
+db.emp.find({
+ "ename " :  'S____'
+});
+
+ 
+
+-- List the emps those are having four chars and third character must be ‘r’
+db.emp.find({
+ "ename " : '__r_'
+});
+
+ 
+
+-- List the Five character names starting with ‘S’ and ending with ‘H’
+db.emp.find({
+ "ename " : 's___h'
+});
+
+ 
+
+-- List the emps who joined in January
+db.emp.find({
+ "month(hiredate)" : '01'
+});
+
+ 
+
+-- List the emps whose names having a character set ‘ll’ together
+db.emp.find({
+ "ename " :  '%ll%'
+});
+
+ 
+
+-- List the emps who does not belong to Deptno 20
+db.emp.find({
+ "deptno <":{ "$gt" :  20 }
+});
+
+ 
+
+-- List all the emps except ‘PRESIDENT’ & ‘MGR” in asc order of Salaries
+db.emp.find({
+
+ 
+
+   "$and": [{
+   "job <":{ "$gt" : 'PRESIDENT'  }
+ },{ " job <":{ "$gt" :  'manager'  }
+   }]
+}).sort({
+ "sal": 1
+});
+
+ 
+
+-- List the emps whose Empno not starting with digit7
+
+ 
+
+
+-- List the emps who are working under ‘MGR’
+db.emp.find({
+
+ 
+
+   "$and": [{
+   "job<":{ "$gt" : 'manager'  }
+ },{ " job<":{ "$gt" : 'president' }
+   }]
+});
+
+ 
+
+-- List the emps who joined in any year but not belongs to the month of March
+db.emp.find({
+ "month(hiredate)<":{ "$gt" : '03' }
+});
+
+ 
+
+-- List all the Clerks of Deptno 20
+db.emp.find({
+
+ 
+
+   "$and": [{
+   "job" : 'clerk' 
+ },{ " deptno" : 20
+   }]
+});
+
+ 
+
+-- List the emps of Deptno 30 or 10 joined in the year 1981
+db.emp.find({
+
+   "$or": [{
+    "deptno " :  30 
+ },{
+   "$and": [{
+   "deptno" : 20 
+ },{ " month(hiredate)" : '1981'
+   }]
+   }]
+});
+-- Display the details of SMITH
+db.emp.find({
+ "ename" : 'smith'
+});
+
+-- Display the location of SMITH
